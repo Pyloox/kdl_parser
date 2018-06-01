@@ -1,0 +1,5 @@
+include(CMakeFindDependencyMacro)
+find_dependency(orocos_kdl)
+find_dependency(TinyXML)
+find_dependency(TinyXML2)
+include("${CMAKE_CURRENT_LIST_DIR}/kdl_parserTargets.cmake")

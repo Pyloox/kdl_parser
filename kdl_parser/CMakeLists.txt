@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0)
 
-project(kdl_parser)
+project(kdl_parser VERSION 1.13.0)
 
 find_package(catkin QUIET
   COMPONENTS rosconsole cmake_modules
@@ -83,10 +83,25 @@ if(catkin_FOUND)
 
   install(DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
-else()
-  install(TARGETS ${PROJECT_NAME}
+else() 
+  install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
           LIBRARY DESTINATION lib
-          ARCHIVE DESTINATION lib)
+          ARCHIVE DESTINATION lib
+          INCLUDES DESTINATION include/${PROJECT_NAME}/)
+
   install(DIRECTORY include/${PROJECT_NAME}/
-          DESTINATION include)
+          DESTINATION include/${PROJECT_NAME})
+
+  install(EXPORT ${PROJECT_NAME}Targets
+          FILE ${PROJECT_NAME}Targets.cmake
+          NAMESPACE ${PROJECT_NAME}::
+          DESTINATION lib/cmake/${PROJECT_NAME})
+
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
+    VERSION ${${PROJECT_NAME}_VERSION}
+    COMPATIBILITY SameMajorVersion)
+  install(FILES "cmake/${PROJECT_NAME}Config.cmake" "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION lib/cmake/${PROJECT_NAME})
+
 endif()
